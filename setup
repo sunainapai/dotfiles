@@ -8,7 +8,7 @@ vimrc:$HOME/.vimrc
 
 main()
 {
-    base_dir="$(readlink -f "$(dirname "$0")")"
+    base_dir="$PWD"
     delete=no
 
     parse_arguments "$@"
@@ -48,17 +48,23 @@ parse_arguments()
 
 setup()
 {
-    echo "$FILES" | grep [[:graph:]] | while read line
+    printf "%s" "$FILES" | grep [[:graph:]] | while read line
     do
         src=$(printf "%s" "$line" | cut -d: -f1)
         src="$base_dir/$src"
         dst=$(printf "%s" "$line" | cut -d: -f2)
 
+        if [ ! -f "$src" ]
+        then
+            printf "%s\n" "Error: File $src does not exist"
+            continue
+        fi
+
         if ln -s "$src" "$dst"
         then
-            echo Created symbolic link "$dst".
+            printf "%s\n" "Created $dst -> $src"
         else
-            echo Failed to create symbolic link "$dst".
+            printf "%s\n" "Error: Failed to create $dst -> $src"
         fi
     done
 }
@@ -66,14 +72,14 @@ setup()
 
 delete()
 {
-    echo "$FILES" | grep [[:graph:]] | while read line
+    printf "%s" "$FILES" | grep [[:graph:]] | while read line
     do
         dst=$(printf "%s" "$line" | cut -d: -f2)
         if rm "$dst"
         then
-            echo Deleted symbolic link "$dst".
+            printf "%s\n" "Deleted $dst"
         else
-            echo Failed to delete symbolic link "$dst".
+            printf "%s\n" "Error: Failed to delete $dst"
         fi
     done
 }
