@@ -1,0 +1,95 @@
+#!/bin/sh
+
+
+FILES="
+vimrc:$HOME/.vimrc
+"
+
+
+main()
+{
+    base_dir="$(readlink -f "$(dirname "$0")")"
+    delete=no
+
+    parse_arguments "$@"
+
+    if [ $delete = no ]
+    then
+        setup
+    else
+        delete
+    fi
+}
+
+
+parse_arguments()
+{
+    while [ "$#" -gt 0 ]
+    do
+        case $1 in
+            -d | --delete)
+                delete=yes
+                shift
+                ;;
+            -h | --help)
+                show_help
+                exit
+                ;;
+            -?*)
+                quit Unknown option \""$1"\".
+                ;;
+            *)
+                quit Surplus argument \""$1"\".
+                ;;
+        esac
+    done
+}
+
+
+setup()
+{
+    echo "$FILES" | grep [[:graph:]] | while read line
+    do
+        src=$(printf "%s" "$line" | cut -d: -f1)
+        src="$base_dir/$src"
+        dst=$(printf "%s" "$line" | cut -d: -f2)
+
+        if ln -s "$src" "$dst"
+        then
+            echo Created symbolic link "$dst".
+        else
+            echo Failed to create symbolic link "$dst".
+        fi
+    done
+}
+
+
+delete()
+{
+    echo "$FILES" | grep [[:graph:]] | while read line
+    do
+        dst=$(printf "%s" "$line" | cut -d: -f2)
+        if rm "$dst"
+        then
+            echo Deleted symbolic link "$dst".
+        else
+            echo Failed to delete symbolic link "$dst".
+        fi
+    done
+}
+
+
+show_help()
+{
+    printf "Usage: $0 [-d] [-h]
+
+Setup files in home directory.
+
+Options:
+  -d, --delete  Delete files. 
+  -h, --help    Show this help and exit.
+"
+}
+
+
+main "$@"
