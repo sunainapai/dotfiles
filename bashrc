@@ -64,3 +64,5 @@ gitme()
     git config user.name
     git config user.email
 }
+
+alias vi='gvim'
