@@ -14,9 +14,11 @@ main()
     then
         setup_dot_files
         setup_bashrc
+        setup_git_config
     else
         undo_dot_files
         undo_bashrc
+        undo_git_config
     fi
 }
 
@@ -129,6 +131,18 @@ undo_bashrc()
         fi
     done
     unset file
+}
+
+
+setup_git_config()
+{
+    sh -x ./gitconfig.sh
+}
+
+
+undo_git_config()
+{
+    awk '/^git/ {print $1 " " $2 " " $3 " --unset " $4}' gitconfig.sh | sh -x
 }
 
 
