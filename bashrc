@@ -65,6 +65,11 @@ gitme()
     git config user.email
 }
 
+uncap()
+{
+    setxkbmap -option caps:escape
+}
+
 alias vi='gvim'
 
 [ -f ~/git/dotfiles/w.bashrc ] && . ~/git/dotfiles/w.bashrc
