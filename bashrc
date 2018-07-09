@@ -66,3 +66,5 @@ gitme()
 }
 
 alias vi='gvim'
+
+[ -f ~/git/dotfiles/w.bashrc ] && . ~/git/dotfiles/w.bashrc
