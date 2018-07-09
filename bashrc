@@ -8,13 +8,29 @@ tput_reset()
     tput sgr0
 }
 
+color_palette()
+{
+    if uname | grep -q Darwin
+    then
+        YELLOW=148
+        GREEN=2
+        PINK=170
+    else
+        YELLOW=226
+        GREEN=46
+        PINK=199
+    fi
+}
+
 active_prompt()
 {
+    color_palette
+
     # Git branch
     git_branch=$(git branch 2> /dev/null | sed -n 's/^\* *//p')
     if [ -n "$git_branch" ]
     then
-        tput_color 148 # yellow
+        tput_color "$YELLOW"
         printf '[%s] ' "$git_branch"
     fi
     unset git_branch
@@ -28,13 +44,13 @@ active_prompt()
         else
             neat_path=$PWD
         fi
-        tput_color 2 # green
+        tput_color "$GREEN"
         printf '%s' "$neat_path"
         unset neat_path
     fi
 
     # Dollar sign
-    tput_color 170 # pink
+    tput_color "$PINK"
     printf '$ '
     tput_reset
 }
