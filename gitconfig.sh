@@ -1,5 +1,6 @@
 git config --global core.editor vim
 git config --global user.useConfigOnly true
+git config --global push.default simple
 
 FORMAT="%C(auto)%h %C(magenta)%ad %C(cyan)%an%C(auto)%d %s"
 PRETTY="--pretty=format:'$FORMAT' --date=short"
