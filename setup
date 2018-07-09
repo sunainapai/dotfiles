@@ -1,34 +1,35 @@
 #!/bin/sh
 
 
-FILES="
-vimrc:$HOME/.vimrc
+DOT_FILES="
+vimrc
 "
 
 
 main()
 {
-    base_dir="$PWD"
-    delete=no
-
     parse_arguments "$@"
 
-    if [ $delete = no ]
+    if [ $undo = no ]
     then
-        setup
+        setup_dot_files
+        setup_bashrc
     else
-        delete
+        undo_dot_files
+        undo_bashrc
     fi
 }
 
 
 parse_arguments()
 {
+    undo=no
+
     while [ "$#" -gt 0 ]
     do
         case $1 in
-            -d | --delete)
-                delete=yes
+            -u | --undo | --uninstall)
+                undo=yes
                 shift
                 ;;
             -h | --help)
@@ -46,54 +47,118 @@ parse_arguments()
 }
 
 
-setup()
+setup_dot_files()
 {
-    printf "%s" "$FILES" | grep [[:graph:]] | while read line
+    printf "%s" "$DOT_FILES" | grep [[:graph:]] | while read filename
     do
-        src=$(printf "%s" "$line" | cut -d: -f1)
-        src="$base_dir/$src"
-        dst=$(printf "%s" "$line" | cut -d: -f2)
+        target="$PWD/$filename"
+        link=~/."$filename"
 
-        if [ ! -f "$src" ]
+        if [ -f "$link" ]
         then
-            printf "%s\n" "Error: File $src does not exist"
-            continue
-        fi
-
-        if ln -s "$src" "$dst"
+            err Link "$link" already exists
+        elif [ ! -f "$target" ]
         then
-            printf "%s\n" "Created $dst -> $src"
-        else
-            printf "%s\n" "Error: Failed to create $dst -> $src"
+            err File "$target" does not exist
+        elif ln -s "$target" "$link"
+        then
+            log Created "$link -> $target"
         fi
     done
 }
 
 
-delete()
+undo_dot_files()
 {
-    printf "%s" "$FILES" | grep [[:graph:]] | while read line
+    printf "%s" "$DOT_FILES" | grep [[:graph:]] | while read filename
     do
-        dst=$(printf "%s" "$line" | cut -d: -f2)
-        if rm "$dst"
+        link=~/."$filename"
+        if [ ! -f "$link" ]
         then
-            printf "%s\n" "Deleted $dst"
-        else
-            printf "%s\n" "Error: Failed to delete $dst"
+            err Link "$link" does not exist
+        elif rm "$link"
+        then
+            log Deleted "$link"
         fi
     done
 }
 
+
+# Comment to mark lines inserted by this script.
+SETUP_MARK='# Added by setup script'
+
+
+setup_bashrc()
+{
+    bashrc="$PWD/bashrc"
+
+    [ -f ~/.bashrc ] && file=~/.bashrc || file=~/.bash_profile
+
+    cmd="[ -f \"$PWD/bashrc\" ] && . \"$PWD/bashrc\" $SETUP_MARK"
+
+    if grep -q "$SETUP_MARK" "$file"
+    then
+        err File "$file" is already updated to load bashrc
+    elif echo "$cmd" >> "$file"
+    then
+        log Updated "$file" to load bashrc
+    fi
+
+    unset bashrc
+    unset file
+    unset cmd
+}
+
+
+undo_bashrc()
+{
+    for file in ~/.bashrc ~/.bash_profile
+    do
+        if [ -f "$file" ]
+        then
+            if grep -q "$SETUP_MARK" "$file"
+            then
+                sed "/$SETUP_MARK/d" "$file" > "$file.tmp" &&
+                mv "$file.tmp" "$file" &&
+                log File "$file" updated to not load bashrc
+            else
+                err File "$file" does not load bashrc
+            fi
+        else
+            err File "$file" does not exist
+        fi
+    done
+    unset file
+}
+
+
+err()
+{
+    log "$0: $*"
+}
+
+
+log()
+{
+    printf "%s\n" "$*" >&2
+}
+
+
+quit()
+{
+    err "$*"
+    exit 1
+}
 
 show_help()
 {
-    printf "Usage: $0 [-d] [-h]
+    printf "Usage: $0 [-u] [-h]
 
 Setup files in home directory.
 
 Options:
-  -d, --delete  Delete files. 
-  -h, --help    Show this help and exit.
+  -u, --undo  Undo setup.
+  -h, --help  Show this help and exit.
 "
 }
 
