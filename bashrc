@@ -40,3 +40,11 @@ active_prompt()
 }
 
 PS1='$(active_prompt)'
+
+gitme()
+{
+    git config user.name "Sunaina Pai"
+    git config user.email "sunainapai.in@gmail.com"
+    git config user.name
+    git config user.email
+}
