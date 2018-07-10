@@ -1,11 +1,15 @@
 tput_color()
 {
+    printf '\x01'
     tput setaf "$1"
+    printf '\x02'
 }
 
 tput_reset()
 {
+    printf '\x01'
     tput sgr0
+    printf '\x02'
 }
 
 color_palette()
