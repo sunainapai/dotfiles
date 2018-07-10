@@ -8,44 +8,44 @@ vimrc
 
 main()
 {
-    parse_arguments "$@"
+    [ $# -gt 1 ] && quit Surplus argument \""$2"\"
+    [ $# -eq 0 ] && arg='<default>' || arg=$1
 
-    if [ $undo = no ]
-    then
-        setup_dot_files
-        setup_bashrc
-        setup_git_config
-    else
-        undo_dot_files
-        undo_bashrc
-        undo_git_config
-    fi
+    case $arg in
+        '<default>')
+            undo_all
+            setup_all
+            ;;
+        rm)
+            undo_all
+            ;;
+        help | -h | --help)
+            show_help
+            ;;
+        *)
+            quit Unknown argument \""$1"\"
+            ;;
+    esac
 }
 
 
-parse_arguments()
+setup_all()
 {
-    undo=no
+    log Installing setup ...
+    setup_dot_files
+    setup_bashrc
+    setup_git_config
+    log
+}
 
-    while [ "$#" -gt 0 ]
-    do
-        case $1 in
-            -u | --undo | --uninstall)
-                undo=yes
-                shift
-                ;;
-            -h | --help)
-                show_help
-                exit
-                ;;
-            -?*)
-                quit Unknown option \""$1"\".
-                ;;
-            *)
-                quit Surplus argument \""$1"\".
-                ;;
-        esac
-    done
+
+undo_all()
+{
+    log Removing setup ...
+    undo_dot_files
+    undo_bashrc
+    undo_git_config
+    log
 }
 
 
@@ -164,15 +164,17 @@ quit()
     exit 1
 }
 
+
 show_help()
 {
-    printf "Usage: $0 [-u] [-h]
+    printf "Usage: $0 [rm | help]
 
 Setup files in home directory.
 
-Options:
-  -u, --undo  Undo setup.
-  -h, --help  Show this help and exit.
+Actions:
+  <default>  Reinstall setup if no action is specified.
+  rm         Remove setup.
+  help       Show this help and exit.
 "
 }
 
