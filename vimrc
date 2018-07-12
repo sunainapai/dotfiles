@@ -17,8 +17,11 @@ if has("gui_running")
     if has("gui_gtk2")
         set guifont=Monospace\ 12
     elseif has("gui_macvim")
-        set guifont=Menlo:h13
+        set guifont=Menlo:h12
     elseif has("gui_win32")
         set guifont=Consolas:h14
     endif
 endif
+
+" Use Slimv for Lisp programming.
+set runtimepath^=~/.vim/bundle/slimv
