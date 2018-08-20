@@ -74,6 +74,25 @@ uncap()
     setxkbmap -option caps:escape
 }
 
+red()
+{
+    case $1 in
+        off)
+            pkill redshift
+            ;;
+        [0-9]*)
+            pkill redshift
+            pkill redshift
+            redshift -v -l 0:0 -t $1:$1 > ~/redshift.log 2>&1 &
+            ;;
+        *)
+            pkill redshift
+            pkill redshift
+            redshift -v -l 13:77 -t 5000:3700 > ~/redshift.log 2>&1 &
+            ;;
+    esac
+}
+
 alias vi='gvim'
 
 [ -f ~/git/dotfiles/w.bashrc ] && . ~/git/dotfiles/w.bashrc
