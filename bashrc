@@ -85,10 +85,13 @@ red()
             pkill redshift
             redshift -v -l 0:0 -t $1:$1 > ~/redshift.log 2>&1 &
             ;;
-        *)
+        "")
             pkill redshift
             pkill redshift
             redshift -v -l 13:77 -t 5000:3700 > ~/redshift.log 2>&1 &
+            ;;
+        *)
+            echo 'Usage: red [off | <temperature>]' >&2
             ;;
     esac
 }
