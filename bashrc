@@ -96,6 +96,15 @@ red()
     esac
 }
 
+makemp3()
+{
+    time for f in "$@"
+    do
+        ffmpeg -y -i "$f" -q:a 0 "${f%.*}.mp3"
+    done
+}
+
 alias vi='gvim'
 
 [ -f ~/git/dotfiles/w.bashrc ] && . ~/git/dotfiles/w.bashrc
+[ -r "/usr/local/etc/profile.d/bash_completion.sh" ] && . "/usr/local/etc/profile.d/bash_completion.sh"
