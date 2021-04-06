@@ -53,7 +53,7 @@ setup_dot_files()
 {
     printf "%s" "$DOT_FILES" | grep [[:graph:]] | while read filename
     do
-        target="$PWD/$filename"
+        target="$PWD/_$filename"
         link=~/."$filename"
 
         if [ -f "$link" ]
