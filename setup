@@ -3,6 +3,7 @@
 
 DOT_FILES="
 vimrc
+tmux.conf
 "
 
 
