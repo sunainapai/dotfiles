@@ -34,7 +34,7 @@ setup_all()
 {
     log Installing setup ...
     setup_dot_files
-    setup_bashrc
+    setup_shrc
     setup_git_config
     log
 }
@@ -44,7 +44,7 @@ undo_all()
 {
     log Removing setup ...
     undo_dot_files
-    undo_bashrc
+    undo_shrc
     undo_git_config
     log
 }
@@ -91,31 +91,35 @@ undo_dot_files()
 SETUP_MARK='# Added by setup script'
 
 
-setup_bashrc()
+setup_shrc()
 {
-    bashrc="$PWD/bashrc"
+    shrc="$PWD/shrc"
+    cmd="[ -f \"$shrc\" ] && . \"$shrc\" $SETUP_MARK"
 
-    [ -f ~/.bashrc ] && file=~/.bashrc || file=~/.bash_profile
-
-    cmd="[ -f \"$PWD/bashrc\" ] && . \"$PWD/bashrc\" $SETUP_MARK"
-
-    if grep -q "$SETUP_MARK" "$file"
-    then
-        err File "$file" is already updated to load bashrc
-    elif echo "$cmd" >> "$file"
-    then
-        log Updated "$file" to load bashrc
-    fi
-
-    unset bashrc
-    unset file
+    for file in ~/.bashrc ~/.bash_profile ~/.zshrc
+    do
+	if [ -f "$file" ]
+	then
+	    if grep -q "$SETUP_MARK" "$file"
+	    then
+		err File "$file" is already updated to load shrc
+	    elif echo "$cmd" >> "$file"
+	    then
+		log Updated "$file" to load shrc
+	    fi
+	else
+	    log Ignored missing file "$file"
+	fi
+    done
+    unset shrc
     unset cmd
+    unset file
 }
 
 
-undo_bashrc()
+undo_shrc()
 {
-    for file in ~/.bashrc ~/.bash_profile
+    for file in ~/.bashrc ~/.bash_profile ~/.zshrc
     do
         if [ -f "$file" ]
         then
@@ -123,12 +127,12 @@ undo_bashrc()
             then
                 sed "/$SETUP_MARK/d" "$file" > "$file.tmp" &&
                 mv "$file.tmp" "$file" &&
-                log File "$file" updated to not load bashrc
+                log File "$file" updated to not load shrc
             else
-                err File "$file" does not load bashrc
+                err File "$file" does not load shrc
             fi
         else
-            err File "$file" does not exist
+            err Ignored missing file "$file"
         fi
     done
     unset file
