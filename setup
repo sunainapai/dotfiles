@@ -98,18 +98,19 @@ setup_shrc()
 
     for file in ~/.bashrc ~/.bash_profile ~/.zshrc
     do
-	if [ -f "$file" ]
-	then
-	    if grep -q "$SETUP_MARK" "$file"
-	    then
-		err File "$file" is already updated to load shrc
-	    elif echo "$cmd" >> "$file"
-	    then
-		log Updated "$file" to load shrc
-	    fi
-	else
-	    log Ignored missing file "$file"
-	fi
+    if [ -f "$file" ]
+    then
+        if grep -q "$SETUP_MARK" "$file"
+        then
+        err File "$file" is already updated to load shrc
+        elif echo "$cmd" >> "$file"
+        then
+        log Updated "$file" to load shrc
+        fi
+    else
+        log Ignored missing file "$file". \
+            To setup "$file", create it manually and run setup again.
+    fi
     done
     unset shrc
     unset cmd
