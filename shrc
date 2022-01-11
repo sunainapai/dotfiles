@@ -1,6 +1,8 @@
 #!/bin/sh
 
-echo Loading shell environment ... >&2
+verbose=no
+
+[ "$verbose" = yes ] && echo Loading shell environment ... >&2
 
 _begin_esc()
 {
@@ -125,7 +127,7 @@ alias vi='gvim'
 
 if [ -n "$BASH_VERSION" ]
 then
-    echo Loading Bash environment ... >&2
+    [ "$verbose" = yes ] && echo Loading Bash environment ... >&2
 
     # Enable completions.
     [ -r "/usr/local/etc/profile.d/bash_completion.sh" ] &&
@@ -133,7 +135,7 @@ then
 
 elif [ -n "ZSH_VERSION" ]
 then
-    echo Loading ZSH environment ... >&2
+    [ "$verbose" = yes ] && echo Loading ZSH environment ... >&2
 
     # Allow command substitution in prompt (disabled by default)
     setopt prompt_subst
@@ -144,4 +146,4 @@ then
 fi
 
 
-echo Done >&2
+[ "$verbose" = yes ] && echo Done >&2
