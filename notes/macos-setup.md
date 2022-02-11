@@ -117,6 +117,13 @@ Enable Sound Icon
  2. Select *Show Sound in menu bar - always*.
 
 
+Enable Bluetooth Icon
+---------------------
+
+ 1. Go to the Apple menu > *System Preferences* > *Bluetooth*.
+ 2. Select *Show Bluetooth in menu bar*.
+
+
 Disable Scroll Bar When Not Scrolling
 -------------------------------------
 
