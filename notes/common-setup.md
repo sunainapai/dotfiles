@@ -12,6 +12,11 @@ save files.
  1. Go to *Preferences* > *General* > *Downloads*.
  2. Ensure *Save files to* is selected.
 
+Disable tracking.
+
+ 1. Go to *Preferences* > *Privacy & Security*.
+ 2. Set *Do Not Track* option to *Always*.
+
 Configure Firefox to never save logins.
 
  1. Go to *Preferences* > *Privacy & Security*.

@@ -28,15 +28,6 @@ Speed Up Key Repeat
  3. Drag *Delay Until Repeat* slider to one mark before *Short*.
 
 
-Configure Desktop
------------------
-
- 1. In the status menu, click the battery icon. Select *Show
-    Percentage*.
- 2. In the status menu, click date, select *Open Date & Time
-    Preferences*, select *Show Date*.
-
-
 Configure Finder
 ----------------
 
@@ -91,16 +82,32 @@ Similarly, this setting ensures that `C-b M-1` arranges tmux pane in
 even horizontal manner.
 
 
+Configure Displays
+-------------------
+
+ 1. Go to the Apple menu > *System Preferences* > *Displays*.
+ 2. Set *Resolution* to *Scaled* and set one larger than *Default*
+ 3. Ensure *True Tone* is selected.
+ 4. Click on *Night Shift*
+      - Set schedule *Custom*.
+      - Select time *From 7:00 PM to 6:59 AM*.
+      - Select *Manual - Turn On Until Tomorrow*.
+
+
 Configure Dock
 --------------
 
- 1. Go to the Apple menu > *System Preferences* > *Dock*.
+ 1. Go to the Apple menu > *System Preferences* > *Dock & Menu Bar*.
  2. Drag *Size* slider closer to *Small* such that its distance from
     *Small* is about 1/4th the distance between *Small* and *Large*.
  3. Select *Minimize windows into application icon*.
  4. Unselect *Show recent applications in Dock*.
  5. Keep only necessary applications in *Dock* and remove others:
     Finder, Launchpad, System Preferences, and Terminal.
+ 6. Launch Finder, and drag and drop home directory to Dock.
+ 7. In the Dock, double tap home directory, select *Folder*.
+ 8. In the Dock, double tap home directory, select *Fan*.
+ 9. Remove Downloads from Dock.
 
 
 Enable Sound Icon
@@ -127,18 +134,6 @@ scroll bar appearing on the right side causes the width of the
 the *Terminal* window no longer spans the whole width of the desktop.
 These problems are avoided by changing this setting such that scroll
 bars appear only when scrolling.
-
-
-Congfigure Displays
--------------------
-
- 1. Go to the Apple menu > *System Preferences* > *Displays*.
- 2. Set *Resolution* to *Scaled* and set one larger than *Default*
- 3. Ensure *True Tone* is selected.
- 4. Click on *Night Shift*
-      - Set schedule *Custom*.
-      - Select time *From 7:00 PM to 6:59 AM*.
-      - Select *Manual - Turn On Until Tomorrow*.
 
 
 Congfigure Battery 
@@ -191,7 +186,7 @@ Install Packages
 
  3. Install web browsers, graphics software, etc.
 
-        brew cask install firefox google-chrome darktable
+        brew install --cask firefox google-chrome darktable
 
 
 Set Up Home Directory
