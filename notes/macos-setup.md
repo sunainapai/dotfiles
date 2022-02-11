@@ -199,6 +199,7 @@ Set Up Home Directory
 
         git clone https://github.com/sunainapai/dotfiles.git
         cd dotfiles
+        touch ~/.zshrc
         ./setup
 
 
